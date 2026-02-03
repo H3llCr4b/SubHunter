@@ -115,7 +115,7 @@ El script genera los siguientes archivos en el directorio de salida:
 ### Archivos para otras herramientas
 - `targets_for_nmap.txt` - Lista de IPs para escanear con nmap
 
-## 🔍 Fuentes Consultadas
+## Fuentes Consultadas
 
 1. **crt.sh** - Certificate Transparency Logs
 2. **HackerTarget** - Subdomain lookup API
@@ -234,7 +234,7 @@ python3 subhunter.py -d example.com --export-format csv
 python3 subhunter.py -d example.com --export-format json
 ```
 
-## 📈 Fases del Escaneo
+## Fases del Escaneo
 
 1. **FASE 1: DESCUBRIMIENTO DE SUBDOMINIOS**
    - Consulta a 20+ fuentes gratuitas
