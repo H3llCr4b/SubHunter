@@ -154,7 +154,7 @@ class SubHunter:
         
         self.output_dir.mkdir(parents=True, exist_ok=True)
         
-        # Almacenamiento de resultados
+
         self.subdomains = set()
         self.resolved = {}  # subdomain -> [ips]
         self.alive_hosts = set()
