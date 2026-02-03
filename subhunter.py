@@ -3,8 +3,6 @@
 
 """
 SubHunter Pro v4.0 - Advanced Infrastructure Discovery & Mapping Tool
-Autor: Carlos - Equipo de Ciberseguridad
-Versión: 4.0 - Professional Edition
 
 Características:
 - 20+ fuentes gratuitas de subdominios
@@ -43,11 +41,7 @@ except ImportError:
     print("[!] aiohttp no instalado. Modo async deshabilitado.")
     print("    Instalar con: pip3 install aiohttp")
 
-# ============================================================================
-# CONFIGURACIÓN Y CONSTANTES
-# ============================================================================
 
-VERSION = "4.0"
 BANNER = r"""
    ____        _     _   _             _              
   / ___| _   _| |__ | | | |_   _ _ __ | |_ ___ _ ___ 
@@ -80,18 +74,15 @@ BANNER = r"""
 █░▒█▒█     █▒█     █░█             █░▒█  █▒███▒█
  █▒███      ██       ██           ██     ██ ██▒█
                     ░               ░                                                                          
-  Ultimate Infrastructure Discovery & Cloud Mapping Tool v4.0
+  Ultimate Infrastructure Discovery & Cloud Mapping Tool
   20+ Free Sources | Cloud Detection | ASN Analysis | Live Validation
 """
 
-# User-Agent para requests
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 
-# Timeouts
 TIMEOUT = 5
 DNS_TIMEOUT = 3
 
-# Cloud IP Ranges (actualizados a 2025)
 CLOUD_PROVIDERS = {
     'gcp': {
         'name': 'Google Cloud Platform',
@@ -115,9 +106,7 @@ CLOUD_PROVIDERS = {
     }
 }
 
-# ============================================================================
-# COLORES Y LOGGING
-# ============================================================================
+
 
 class Colors:
     RED = '\033[0;31m'
@@ -150,9 +139,6 @@ def log_alive(msg):
 def log_cloud(msg):
     print(f"{Colors.CYAN}[CLOUD]{Colors.NC} {msg}")
 
-# ============================================================================
-# CLASE PRINCIPAL: SubHunter
-# ============================================================================
 
 class SubHunter:
     def __init__(self, domain, output_dir, threads=50, timeout=5, verbose=False, 
@@ -233,10 +219,7 @@ class SubHunter:
         self.generate_reports()
         
         self.print_statistics()
-    
-    # ========================================================================
-    # FUENTES DE SUBDOMINIOS
-    # ========================================================================
+
     
     def discover_subdomains(self):
         """Descubre subdominios usando múltiples fuentes gratuitas"""
@@ -444,15 +427,24 @@ class SubHunter:
     def source_bruteforce(self):
         """DNS Brute Force con wordlist común"""
         common_subs = [
-            'www', 'mail', 'ftp', 'smtp', 'pop3', 'imap', 'webmail', 'admin',
-            'api', 'dev', 'test', 'qa', 'uat', 'staging', 'prod', 'app',
-            'mobile', 'portal', 'dashboard', 'panel', 'console', 'vpn',
-            'remote', 'blog', 'forum', 'support', 'help', 'docs', 'wiki',
-            'store', 'shop', 'cdn', 'static', 'assets', 'img', 'media',
-            'files', 'upload', 'download', 'backup', 'git', 'jenkins', 'ci',
-            'demo', 'sandbox', 'beta', 'alpha', 'v1', 'v2', 'internal',
-            'external', 'public', 'private', 'status', 'health', 'monitoring',
-            'mx', 'ns', 'ns1', 'ns2', 'dns'
+            
+            'www', 'www1', 'www2', 'mail', 'email', 'ftp', 'ftps', 'smtp', 'pop', 'pop3',
+            'imap', 'webmail', 'mx', 'ns', 'ns1', 'ns2', 'ns3', 'dns','admin', 'administrator',
+            'admins', 'panel', 'cpanel', 'dashboard', 'console', 'manage', 'management', 'sysadmin', 
+            'root','app', 'apps', 'mobile', 'portal', 'client', 'customers', 'users','account', 
+            'accounts', 'login', 'auth', 'oauth', 'sso', 'api', 'api1', 'api2', 'apis', 'backend', 
+            'service', 'services', 'rest', 'graphql', 'ws', 'dev', 'dev1', 'dev2', 'test', 'testing',
+            'qa', 'uat', 'stage', 'staging', 'preprod', 'prod', 'production', 'sandbox', 'demo',
+            'v1', 'v2', 'v3', 'beta', 'alpha', 'old', 'legacy', 'new', 'internal', 'external', 
+            'private', 'public', 'intranet', 'extranet', 'local', 'lan', 'wan', 'edge', 'gateway', 
+            'router', 'cloud', 'aws', 'azure', 'gcp', 'k8s', 'kubernetes', 'docker','registry', 'harbor',
+            'git', 'gitlab', 'github', 'bitbucket', 'repo', 'repos', 'ci', 'cd', 'jenkins', 'build', 
+            'deploy', 'status', 'health', 'monitor', 'monitoring', 'metrics', 'grafana',
+            'prometheus', 'alerts', 'uptime', 'blog', 'forum', 'community', 'docs', 'doc', 'wiki', 'kb',
+            'support', 'help', 'faq', 'cdn', 'static', 'assets', 'img', 'images', 'media', 'video',
+            'files', 'downloads', 'upload', 'backup', 'backups', 'vpn', 'remote', 'rdp', 'ssh', 'secure', 
+            'security', 'firewall', 'waf', 'ids', 'ips', 'shop', 'store', 'cart', 'checkout', 'payment', 'payments',
+            'search', 'logs', 'log', 'tmp', 'testbed', 'lab', 'labs'
         ]
         
         results = set()
@@ -468,11 +460,6 @@ class SubHunter:
                 pass
         
         return results
-    
-    # ========================================================================
-    # RESOLUCIÓN DNS
-    # ========================================================================
-    
     def resolve_dns(self):
         """Resuelve IPs de todos los subdominios"""
         log_info(f"Resolviendo DNS para {len(self.subdomains)} subdominios...")
@@ -522,11 +509,6 @@ class SubHunter:
             pass
         
         return ips
-    
-    # ========================================================================
-    # DESCUBRIMIENTO DE IPs ORIGIN (detrás de CDN/Proxy)
-    # ========================================================================
-    
     def discover_origin_ips(self):
         """Descubre IPs origin detrás de CDN/Proxies"""
         log_info("\n" + "=" * 70)
@@ -535,8 +517,7 @@ class SubHunter:
         log_info("Buscando IPs reales detrás de Cloudflare/CDN...")
         
         self.origin_ips = {}  # subdomain -> [origin_ips]
-        
-        # Técnicas de descubrimiento (ordenadas por efectividad)
+    
         techniques = [
             ('CrimeFlare Database', self.origin_crimeflare),
             ('MX Records Analysis', self.origin_from_mx),
@@ -560,18 +541,14 @@ class SubHunter:
             except Exception as e:
                 if self.verbose:
                     log_error(f"{name}: {str(e)}")
-        
-        # Deduplicar
         for subdomain in self.origin_ips:
             self.origin_ips[subdomain] = list(set(self.origin_ips[subdomain]))
         
-        # Filtrar IPs que ya conocemos (las actuales de DNS) y IPs de Cloudflare
         filtered_origins = {}
         for subdomain, origins in self.origin_ips.items():
             current_ips = set(self.resolved.get(subdomain, []))
             new_origins = []
             for ip in origins:
-                # Solo agregar si NO es IP actual Y NO es Cloudflare
                 if ip not in current_ips and not self._is_cloudflare_ip(ip):
                     new_origins.append(ip)
             
@@ -583,24 +560,19 @@ class SubHunter:
         total_origins = sum(len(ips) for ips in self.origin_ips.values())
         if total_origins > 0:
             log_success(f"IPs origin descubiertas: {total_origins}")
-            log_warning("⚠️  Estas IPs pueden estar expuestas sin protección CDN")
+            log_warning(" Estas IPs pueden estar expuestas sin protección CDN")
         else:
             log_info("No se encontraron IPs origin adicionales")
     
     def origin_crimeflare(self):
         """Consulta base de datos CrimeFlare de IPs origin conocidas"""
         results = {}
-        
-        # CrimeFlare mantiene una lista de subdominios con IPs origin conocidas
-        # Intentar consultar varias fuentes públicas
+    
         
         sources = [
-            f"http://www.crimeflare.org:82/cfs.html",  # CrimeFlare oficial
-            # GitHub repos con databases de origin IPs
+            f"http://www.crimeflare.org:82/cfs.html",  
         ]
         
-        # También podemos usar técnicas similares a CrimeFlare
-        # Buscar en subdominios mail.*, mx.*, smtp.*
         mail_prefixes = ['mail', 'mx', 'mx1', 'mx2', 'smtp', 'pop', 'imap', 'webmail']
         
         base_domain = self.domain
@@ -610,11 +582,9 @@ class SubHunter:
                 answers = dns.resolver.resolve(test_subdomain, 'A', lifetime=DNS_TIMEOUT)
                 ips = [str(rdata) for rdata in answers]
                 
-                # Filtrar IPs de Cloudflare
                 non_cf_ips = [ip for ip in ips if not self._is_cloudflare_ip(ip)]
                 
                 if non_cf_ips:
-                    # Estas IPs de mail servers suelen ser el origin real
                     results[self.domain] = non_cf_ips
                     if self.verbose:
                         log_found(f"Mail server origin: {test_subdomain} → {non_cf_ips[0]}")
@@ -628,22 +598,18 @@ class SubHunter:
         results = {}
         
         try:
-            # Obtener MX records del dominio principal
             mx_records = dns.resolver.resolve(self.domain, 'MX', lifetime=DNS_TIMEOUT)
             
             for mx in mx_records:
                 mx_host = str(mx.exchange).rstrip('.')
                 
-                # Resolver el MX host a IP
                 try:
                     a_records = dns.resolver.resolve(mx_host, 'A', lifetime=DNS_TIMEOUT)
                     ips = [str(rdata) for rdata in a_records]
                     
-                    # Filtrar Cloudflare
                     non_cf_ips = [ip for ip in ips if not self._is_cloudflare_ip(ip)]
                     
                     if non_cf_ips:
-                        # MX records a menudo apuntan al servidor origin
                         if self.domain not in results:
                             results[self.domain] = []
                         results[self.domain].extend(non_cf_ips)
@@ -662,19 +628,16 @@ class SubHunter:
         results = {}
         
         try:
-            # crt.sh a veces muestra IPs en commonName o SANs
             url = f"https://crt.sh/?q=%.{self.domain}&output=json"
             resp = self.session.get(url, timeout=10)
             
             if resp.status_code == 200:
                 data = resp.json()
                 
-                # Buscar IPs en los nombres
                 for cert in data:
                     if 'name_value' in cert:
                         names = cert['name_value'].split('\n')
                         for name in names:
-                            # Buscar patrones de IP
                             ips = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', name)
                             for ip in ips:
                                 if not self._is_cloudflare_ip(ip):
@@ -689,7 +652,6 @@ class SubHunter:
     def origin_securitytrails(self):
         """Obtiene histórico DNS de SecurityTrails (sin API key)"""
         results = {}
-        # SecurityTrails público muestra algo de info sin login
         for subdomain in list(self.subdomains)[:10]:  # Limitar para no abusar
             try:
                 url = f"https://securitytrails.com/domain/{subdomain}/history/a"
@@ -827,10 +789,7 @@ class SubHunter:
             pass
         
         return False
-    
-    # ========================================================================
-    # ANÁLISIS DE INFRAESTRUCTURA CLOUD
-    # ========================================================================
+
     
     def analyze_cloud_infrastructure(self):
         """Analiza la infraestructura cloud"""
@@ -991,10 +950,7 @@ class SubHunter:
         
         return None
     
-    # ========================================================================
-    # VALIDACIÓN ACTIVA
-    # ========================================================================
-    
+
     def validate_alive(self):
         """Valida hosts activos HTTP/HTTPS"""
         log_info(f"Validando hosts activos (timeout: {self.timeout}s)...")
@@ -1132,10 +1088,6 @@ class SubHunter:
         
         return tech
     
-    # ========================================================================
-    # GENERACIÓN DE REPORTES
-    # ========================================================================
-    
     def generate_reports(self):
         """Genera todos los reportes y exportaciones"""
         log_info("Generando reportes...")
@@ -1220,7 +1172,7 @@ class SubHunter:
                 json.dump(self.origin_ips, f, indent=2)
             
             log_success(f"IPs Origin: {origin_file}")
-            log_warning(f"⚠️  {len(self.origin_ips)} subdominios con IPs origin expuestas")
+            log_warning(f" {len(self.origin_ips)} subdominios con IPs origin expuestas")
         
         # 8. Tecnologías detectadas
         if self.technologies:
@@ -1568,9 +1520,7 @@ class SubHunter:
         
         log_success(f"Resultados guardados en: {Colors.YELLOW}{self.output_dir}{Colors.NC}")
     
-    # ========================================================================
-    # DETECCIÓN AVANZADA DE TECNOLOGÍAS Y WAF
-    # ========================================================================
+¿
     
     def detect_technologies_advanced(self):
         """Detección avanzada de tecnologías usando whatweb"""
@@ -1694,7 +1644,7 @@ class SubHunter:
         # Estadísticas de WAF
         waf_count = len(self.waf_results)
         if waf_count > 0:
-            log_warning(f"⚠️  WAF detectado en {waf_count} hosts")
+            log_warning(f"WAF detectado en {waf_count} hosts")
             
             # Mostrar resumen de WAFs
             waf_types = {}
